@@ -1,46 +1,46 @@
+"use client"; // This is the key change
+
+import { useEffect, useState } from "react";
 import { Product } from "../types/product";
 import ProductList from "./components/ProductList";
 import Navbar from "./components/Navbar";
 
-export const dynamic = "force-dynamic";
+export default function HomePage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-//Function to fetch the products from fakestore and will send it to ProductList
-async function getProducts() {
-  try {
-    const baseUrl =
-      process.env.NEXT_PUBLIC_API_URL || "https://fakestoreapi.com";
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const url = process.env.NEXT_PUBLIC_API_URL || "https://fakestoreapi.com";
+        const response = await fetch(`${url}/products`);
+        
+        if (!response.ok) throw new Error("Failed to fetch products");
+        
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Client fetch error:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    const response = await fetch(`${baseUrl}/products/`, {
-      method: "GET",
-      cache: "no-store",
-      headers: {
-        "User-Agent": "Mozilla/5.0",
-        "Content-Type": "application/json",
-      },
-      next: { revalidate: 0 }, // Force fresh data
-    });
-
-    // Error handling for response which will come from fakestoreapi
-    if (!response.ok) throw new Error(`Failed to fetch products`);
-
-    // returing the response back
-    return response.json();
-  } catch (error) {
-    console.error("Build-time fetch failed: ", error); // added because while deploying to netlify build is failed
-    return []; // now if there is error during api fetch it will give the empty array and build will be successfull
-  }
-}
-
-export default async function HomePage() {
-  // calling the getProducts function
-  const products: Product[] = await getProducts();
+    fetchProducts();
+  }, []);
 
   return (
-    <>
-      <main className="">
-        <Navbar />
+    <main>
+      <Navbar />
+      {isLoading ? (
+        /* Professional Loading State */
+        <div className="flex flex-col items-center justify-center min-h-[60vh]">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+          <p className="text-gray-500 animate-pulse">Loading products...</p>
+        </div>
+      ) : (
         <ProductList initialProducts={products} />
-      </main>
-    </>
+      )}
+    </main>
   );
 }
