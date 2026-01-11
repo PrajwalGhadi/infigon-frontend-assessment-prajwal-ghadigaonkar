@@ -9,9 +9,12 @@ export const dynamic = "force-dynamic";
 
 async function getProductById(id: string) {
   try {
-    const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
+    const baseUrl =
+      process.env.NEXT_PUBLIC_API_URL || "https://fakestoreapi.com";
+
+    const response = await fetch(`${baseUrl}/products/${id}`, {
       method: "GET",
-      cache: 'no-store',
+      cache: "no-store",
       headers: {
         "User-Agent": "Mozilla/5.0",
         "Content-Type": "application/json",

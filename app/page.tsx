@@ -7,9 +7,12 @@ export const dynamic = "force-dynamic";
 //Function to fetch the products from fakestore and will send it to ProductList
 async function getProducts() {
   try {
-    const response = await fetch("https://fakestoreapi.com/products", {
+    const baseUrl =
+      process.env.NEXT_PUBLIC_API_URL || "https://fakestoreapi.com";
+
+    const response = await fetch(`${baseUrl}/products/`, {
       method: "GET",
-      cache: 'no-store',
+      cache: "no-store",
       headers: {
         "User-Agent": "Mozilla/5.0",
         "Content-Type": "application/json",
