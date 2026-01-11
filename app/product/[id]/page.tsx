@@ -1,22 +1,29 @@
 import Link from "next/link";
-import { Product } from "../../../types/product";
 import { IoCartOutline } from "react-icons/io5";
 import Image from "next/image";
 
 interface ProductProps {
   params: Promise<{ id: string }>;
 }
+export const dynamic = "force-dynamic";
 
 async function getProductById(id: string) {
   try {
-    const response = await fetch(`https://fakestoreapi.com/products/${id}`);
-  
+    const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
+      method: "GET",
+      headers: {
+        "User-Agent": "Mozilla/5.0",
+        "Content-Type": "application/json",
+      },
+      next: { revalidate: 0 }, // Force fresh data
+    });
+
     if (!response.ok) throw new Error(`Post not found by id: ${id}`);
-  
+
     return response.json();
   } catch (error) {
-    console.error('Build-time fetch failed: ', error)
-    return []
+    console.error("Build-time fetch failed: ", error);
+    return [];
   }
 }
 
