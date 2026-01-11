@@ -3,7 +3,7 @@
 A high-performance, responsive e-commerce application built with **Next.js 15**, **TypeScript**, and **Tailwind CSS**. This project demonstrates the implementation of server-side data fetching, dynamic routing, and persistent user states.
 
 ## 🚀 Live Demo
-**[Insert your Netlify/Vercel Link Here]**
+**https://infigon-frontend-assessment-prajwal.netlify.app/**
 
 ---
 
