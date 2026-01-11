@@ -11,6 +11,7 @@ async function getProductById(id: string) {
   try {
     const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
       method: "GET",
+      cache: 'no-store',
       headers: {
         "User-Agent": "Mozilla/5.0",
         "Content-Type": "application/json",
