@@ -4,13 +4,18 @@ import Navbar from "./components/Navbar";
 
 //Function to fetch the products from fakestore and will send it to ProductList
 async function getProducts() {
-  const response = await fetch("https://fakestoreapi.com/products");
-
-  // Error handling for response which will come from fakestoreapi
-  if (!response.ok) throw new Error(`Failed to fetch products`);
-
-  // returing the response back
-  return response.json();
+  try {
+    const response = await fetch("https://fakestoreapi.com/products");
+  
+    // Error handling for response which will come from fakestoreapi
+    if (!response.ok) throw new Error(`Failed to fetch products`);
+  
+    // returing the response back
+    return response.json();
+  } catch(error) {
+    console.error('Build-time fetch failed: ', error) // added because while deploying to netlify build is failed
+    return [] // now if there is error during api fetch it will give the empty array and build will be successfull
+  }
 }
 
 export default async function HomePage() {

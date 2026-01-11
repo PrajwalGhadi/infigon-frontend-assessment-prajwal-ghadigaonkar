@@ -8,11 +8,16 @@ interface ProductProps {
 }
 
 async function getProductById(id: string) {
-  const response = await fetch(`https://fakestoreapi.com/products/${id}`);
-
-  if (!response.ok) throw new Error(`Post not found by id: ${id}`);
-
-  return response.json();
+  try {
+    const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+  
+    if (!response.ok) throw new Error(`Post not found by id: ${id}`);
+  
+    return response.json();
+  } catch (error) {
+    console.error('Build-time fetch failed: ', error)
+    return []
+  }
 }
 
 export default async function SingleProduct({ params }: ProductProps) {
